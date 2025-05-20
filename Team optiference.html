@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hair Fringe Width Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background: #f7f7f7;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+    }
+    .input-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      background-color: #007acc;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    button:hover {
+      background-color: #005f99;
+    }
+    .result {
+      margin-top: 1.5rem;
+      font-size: 1.25rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Hair Fringe Width Calculator</h1>
+  
+  <div class="input-group">
+    <label for="wavelength">Wavelength (nanometers):</label>
+    <input type="number" id="wavelength" placeholder="e.g., 650" step="any">
+  </div>
+  
+  <div class="input-group">
+    <label for="distance">Distance from hair to screen (centimeters):</label>
+    <input type="number" id="distance" placeholder="e.g., 100" step="any">
+  </div>
+  
+  <div class="input-group">
+    <label for="fringeSep">Fringe separation (millimeters):</label>
+    <input type="number" id="fringeSep" placeholder="e.g., 10" step="any">
+  </div>
+  
+  <button id="calculateBtn">Calculate Width</button>
+  
+  <div class="result">
+    <p>Calculated Width: <span id="resultMeters">0</span> m</p>
+    <p>Calculated Width: <span id="resultMicrometers">0</span> μm</p>
+  </div>
+  
+  <script>
+    // Conversion constants
+    const NM_TO_M = 1e-9;      // nanometers to meters
+    const CM_TO_M = 1/100;     // centimeters to meters
+    const MM_TO_M = 1/1000;    // millimeters to meters
+    const M_TO_MICROM = 1e6;   // meters to micrometers
+
+    document.getElementById('calculateBtn').addEventListener('click', function() {
+      // Retrieve and parse the values
+      const wavelengthNM = parseFloat(document.getElementById('wavelength').value);
+      const distanceCM = parseFloat(document.getElementById('distance').value);
+      const fringeMM = parseFloat(document.getElementById('fringeSep').value);
+      
+      // Validate input: all values must be numbers and fringe separation must not be zero.
+      if (isNaN(wavelengthNM) || isNaN(distanceCM) || isNaN(fringeMM) || fringeMM === 0) {
+        alert("Please enter valid numbers. Ensure that fringe separation is not zero.");
+        return;
+      }
+      
+      // Convert inputs to meters
+      const wavelengthM = wavelengthNM * NM_TO_M;
+      const distanceM = distanceCM * CM_TO_M;
+      const fringeM = fringeMM * MM_TO_M;
+      
+      // Calculate the width in meters using: width = (wavelength * distance) / fringe separation
+      const widthM = (wavelengthM * distanceM) / fringeM;
+      const widthMicrom = widthM * M_TO_MICROM;
+      
+      // Display the result
+      document.getElementById('resultMeters').textContent = widthM.toFixed(6);
+      document.getElementById('resultMicrometers').textContent = widthMicrom.toFixed(2);
+    });
+  </script>
+</body>
+</html>
